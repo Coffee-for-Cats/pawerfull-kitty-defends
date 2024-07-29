@@ -1,9 +1,16 @@
-export let actualScene = await import('./scenes/menu.ts')
+interface Scene {
+  alive(): void,
+  entities: any[]
+}
+
+export let actualScene: Scene;
+
+loadScene(await import('./scenes/menu.ts'))
 
 export async function loadScene(module: any) {
-  if(!module.alive) {
-    alert('Module needs a .alive exported array to be loaded as a scene!')
-    throw new Error('Scene does not have an alive array')
+  if(!module.alive || !module.entities) {
+    alert('Module does not contain alive or entities exports!')
+    throw new Error('Module does not contain alive or entities exports')
   }
   actualScene = module;
 }
@@ -13,9 +20,10 @@ if(!canvas) { alert('Canvas not found!'); throw new Error('Canvas not found'); }
 export const ctx = canvas.getContext('2d');
 
 function step() {
-  for(let i = 0; i < actualScene.alive.length; i++) {
-    actualScene[i].step();
+  for(let i = 0; i < actualScene.entities.length; i++) {
+    actualScene.alive()
+    actualScene.entities[i].step(actualScene)
   }
-  window.requestAnimationFrame(step);
+  window.requestAnimationFrame(step)
 }
-window.requestAnimationFrame(step);
+window.requestAnimationFrame(step)
