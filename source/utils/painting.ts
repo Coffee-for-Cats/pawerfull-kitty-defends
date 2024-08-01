@@ -38,7 +38,11 @@ async function cacheSource(stringSrc: string) {
   cachedSources[stringSrc] = document.createElement('canvas') as HTMLCanvasElement
   
   // await the image load to print it in the offscreen canvas
-  await new Promise<void>( res => {
+  await new Promise<void>( (res, err) => {
+    tempImg.onerror = () => { 
+      err()
+      throw new Error(`Error loading ${stringSrc}. File not found.`); 
+    }
     tempImg.onload = () => res()
   })
   
