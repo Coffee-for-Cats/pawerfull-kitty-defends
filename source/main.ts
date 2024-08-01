@@ -1,29 +1,44 @@
-interface Scene {
-  alive(): void,
-  entities: any[]
+import { CANVAS_SOURCE } from './config.ts';
+import * as Menu from './scenes/menu.ts'
+
+export interface Entity {
+  step: Function
 }
 
-export let actualScene: Scene;
+export interface Scene {
+  load?: Function,
+  drop?: Function,
+  alive?: Function,
+  entities: Entity[]
+}
 
-loadScene(await import('./scenes/menu.ts'))
+// Canvas where to draw the game
+export const Canvas = document.getElementById(CANVAS_SOURCE) as HTMLCanvasElement;
+if(!Canvas) { throw new Error('Canvas not found') }
+// Ctx how to draw the game
+export const Ctx = Canvas.getContext('2d') as CanvasRenderingContext2D;
+if(!Ctx) { throw new Error(`#${CANVAS_SOURCE} is not a canvas!`) }
+Ctx.imageSmoothingEnabled = false;
 
-export async function loadScene(module: any) {
-  if(!module.alive || !module.entities) {
-    alert('Module does not contain alive or entities exports!')
-    throw new Error('Module does not contain alive or entities exports')
-  }
+
+let actualScene: Scene;
+
+export async function loadScene(module: Scene) {
+  if(actualScene?.drop) actualScene.drop(module);
+  if(module.load) module.load(actualScene);
   actualScene = module;
 }
 
-export const canvas = document.getElementById('game_canvas') as HTMLCanvasElement;
-if(!canvas) { alert('Canvas not found!'); throw new Error('Canvas not found'); }
-export const ctx = canvas.getContext('2d');
-
+// the entire gameloop =)
 function step() {
+  if (actualScene.alive) actualScene.alive()
   for(let i = 0; i < actualScene.entities.length; i++) {
-    actualScene.alive()
+    Ctx.clearRect(0, 0, Canvas.width, Canvas.height);
     actualScene.entities[i].step(actualScene)
   }
   window.requestAnimationFrame(step)
 }
 window.requestAnimationFrame(step)
+
+// bootstrap the game
+loadScene(Menu)

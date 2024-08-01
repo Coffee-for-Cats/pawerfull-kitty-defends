@@ -6,7 +6,9 @@
   <title>PAWerfull Kitty Defends</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
     * {
+      font-family: 'Poppins', sans-serif;
       box-sizing: border-box;
       padding: 0;
       margin: 0;
@@ -24,6 +26,12 @@
       justify-content: center;
       flex-direction: column;
     }
+    #canvas-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
     canvas {
       border: 2px solid #202020;
       background: #f0f0f0;
@@ -36,7 +44,9 @@
 <body>
   <main class="flex-full">
     <h1 class="centered title">PAWerfull Kitty Defends</h1>
-    <canvas class="centered" width="600" height="500" id="game_canvas"></canvas>
+    <div id="canvas-container">
+      <canvas class="centered" width="600" height="500" id="game_canvas"></canvas>
+    </div>
   </main>
 </body>
 

@@ -1,10 +1,29 @@
-import { GameObject } from "../models/entity.ts";
+import { loadScene } from "../main";
+import { CONTAINER_SOURCE } from "../config";
 
-console.log('Hello from menu!')
+import * as SelectingScene from './course-select'
 
-export function alive() {
-  
-}
 export const entities: any[] = [];
 
-entities.push(new GameObject())
+const title = document.createElement('h2')
+title.innerText = "Catnip Brewer"
+
+const button = document.createElement('button')
+button.innerText = "Play"
+button.onclick = () => {
+  loadScene(SelectingScene)
+}
+
+const div = document.createElement('div')
+div.style['position'] = 'absolute'
+div.append(title, button);
+
+const container = document.getElementById(CONTAINER_SOURCE) as HTMLDivElement;
+
+export function load() {
+  container.append(div)
+}
+
+export function drop() {
+  container.removeChild(div)
+}
