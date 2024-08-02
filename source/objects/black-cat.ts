@@ -13,7 +13,9 @@ const cat: GameObject = {
 
 export function step(scene: Scene) {
   // controls
-  if(ActiveKeys['ArrowUp']) cat.velY += .8;
+  if(ActiveKeys['ArrowUp']) cat.velY += 1;
+  if(ActiveKeys['ArrowRight']) cat.velX += .6;
+  if(ActiveKeys['ArrowLeft']) cat.velX -= .6;
   
   // gravity
   cat.velY -= 0.6;
