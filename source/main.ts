@@ -1,16 +1,6 @@
 import { CANVAS_SOURCE } from './config.ts';
 import * as Menu from './scenes/menu.ts'
-
-export interface Entity {
-  step: Function
-}
-
-export interface Scene {
-  load?: Function,
-  drop?: Function,
-  alive?: Function,
-  entities: Entity[]
-}
+import { Scene } from './interfaces.ts';
 
 // Canvas where to draw the game
 export const Canvas = document.getElementById(CANVAS_SOURCE) as HTMLCanvasElement;
@@ -31,9 +21,9 @@ export async function loadScene(module: Scene) {
 
 // the entire gameloop =)
 function step() {
+  Ctx.clearRect(0, 0, Canvas.width, Canvas.height);
   if (actualScene.alive) actualScene.alive()
   for(let i = 0; i < actualScene.entities.length; i++) {
-    Ctx.clearRect(0, 0, Canvas.width, Canvas.height);
     actualScene.entities[i].step(actualScene)
   }
   window.requestAnimationFrame(step)

@@ -1,12 +1,7 @@
 import { Canvas, Ctx } from "../main";
+import { Paintable } from "../interfaces";
 
 const ZoomLevel = 6;
-
-interface Paintable {
-  x: number,
-  y: number,
-  image: string
-}
 
 export const Camera = {
   x: 0,
@@ -18,12 +13,17 @@ export const Camera = {
 const cachedSources = {}
 
 export function Paint(obj: Paintable) {
-  if(!cachedSources[obj.image]) cacheSource(obj.image)
+  if(!cachedSources[obj.source as string]) {
+    cacheSource(obj.source as string).then((img: HTMLCanvasElement) => {
+      obj.image = img;
+    })
+  }
 
-  const source = cachedSources[obj.image]
+  const source = cachedSources[obj.source as string]
   
   const x = obj.x + Camera.x + (Canvas.width / 2) - (source.width / 2)
-  const y = obj.y + Camera.y + (Canvas.height / 2) - (source.height / 2)
+  // y inverted due to canvas rendering
+  const y = -obj.y + Camera.y + (Canvas.height / 2) - (source.height / 2)
   
   Ctx.drawImage(
     source, 
@@ -31,7 +31,8 @@ export function Paint(obj: Paintable) {
   )
 }
 
-async function cacheSource(stringSrc: string) {
+// saves and returns a canvas of the sprite source passed
+export async function cacheSource(stringSrc: string) {
   const tempImg = document.createElement('img')
   tempImg.src = stringSrc
   
@@ -55,4 +56,6 @@ async function cacheSource(stringSrc: string) {
   tempCtx.drawImage(
     tempImg, 0, 0, tempImg.width * ZoomLevel, tempImg.height * ZoomLevel
   )
+
+  return cachedSources[stringSrc]
 }
