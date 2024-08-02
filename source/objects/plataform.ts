@@ -9,6 +9,13 @@ export const plataform = {
   step
 }
 
+export const plataform2 = {
+  x: 0, y: 150,
+  source: '/source/assets/plataform.png',
+  solid: true,
+  step
+}
+
 export function step() {
-  Paint(plataform)
+  Paint(this)
 }
