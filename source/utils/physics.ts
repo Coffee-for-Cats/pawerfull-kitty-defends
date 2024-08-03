@@ -1,10 +1,10 @@
 import { GameObject } from "../interfaces";
 
 
+const lastContact: GameObject[] = [];
 // make an object move considering the entities passed as arguments.
 // *MODIFY* the actual object speed and position.
-export function move(obj: GameObject, entities: GameObject[]) {
-  
+export function update_pos(obj: GameObject, entities: GameObject[]) {
   const objImg = obj.image || { width: 0, height: 0 }
 
   // for y axis, calculate, for every entity, the minimum distance.

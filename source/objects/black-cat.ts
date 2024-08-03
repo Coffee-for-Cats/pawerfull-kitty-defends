@@ -1,7 +1,7 @@
 import { GameObject, Paintable, Scene } from "../interfaces"
 import { ActiveKeys } from "../utils/key-mapping";
 import { Paint } from "../utils/painting"
-import { move } from "../utils/physics";
+import { update_pos } from "../utils/physics";
 
 
 const cat: GameObject = {
@@ -25,7 +25,7 @@ export function step(scene: Scene) {
 
   //const vec = [cat.velX, cat.velY]
   const solidObjects = scene.entities.filter((e: any) => e.solid ) as GameObject[]
-  move(cat, solidObjects);
+  update_pos(cat, solidObjects);
 
   Paint(cat as Paintable)
 }

@@ -1,7 +1,6 @@
 import { Canvas, Ctx } from "../main";
 import { Paintable } from "../interfaces";
-
-const ZoomLevel = 6;
+import { ZOOM_LEVEL } from "../config" 
 
 export const Camera = {
   x: 0,
@@ -9,8 +8,6 @@ export const Camera = {
   setX(x: number) { Camera.x = x },
   setY(y: number) { Camera.y = y },
 }
-
-const cachedSources = {}
 
 export function Paint(obj: Paintable) {
   if(!obj.image) obj.image = getSource(obj.source)
@@ -23,10 +20,11 @@ export function Paint(obj: Paintable) {
   
   Ctx.drawImage(
     source, 
-    x, y,
+    ~~x, ~~y,
   )
 }
 
+const cachedSources = {}
 // saves and returns a canvas of the sprite source passed
 export function getSource(stringSrc: string) {
   if(cachedSources[stringSrc]) return cachedSources[stringSrc];
@@ -37,14 +35,14 @@ export function getSource(stringSrc: string) {
   cachedSources[stringSrc] = document.createElement('canvas') as HTMLCanvasElement
   
   tempImg.onload = function initializeBuffer() {
-    cachedSources[stringSrc].width = tempImg.width * ZoomLevel
-    cachedSources[stringSrc].height = tempImg.height * ZoomLevel
+    cachedSources[stringSrc].width = tempImg.width * ZOOM_LEVEL
+    cachedSources[stringSrc].height = tempImg.height * ZOOM_LEVEL
 
     const tempCtx = cachedSources[stringSrc].getContext('2d') as CanvasRenderingContext2D
     tempCtx.imageSmoothingEnabled = false
 
     tempCtx.drawImage(
-      tempImg, 0, 0, tempImg.width * ZoomLevel, tempImg.height * ZoomLevel
+      tempImg, 0, 0, tempImg.width * ZOOM_LEVEL, tempImg.height * ZOOM_LEVEL
     )
   }
 
