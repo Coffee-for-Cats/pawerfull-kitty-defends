@@ -1,12 +1,12 @@
 export interface Scene {
   load?:    Function,
   drop?:    Function,
-  alive?:   Function,
+  step?:   Function,
   entities: Entity[]
 }
 
 export interface Entity {
-  step?: Function,
+  step: Function,
 }
 
 export interface Paintable extends Entity {

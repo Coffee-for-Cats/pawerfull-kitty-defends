@@ -5,16 +5,17 @@ import { flipImage, Paint } from "../utils/painting"
 import { update_pos } from "../utils/physics";
 
 
-const cat: GameObject = {
+export const cat: GameObject = {
   solid: false,
   x: 0, y: 0,
   velX: 0, velY: 0,
   direction: direction.left,
   contacts: {},
-  source: '/source/assets/blackcat.png'
+  source: '/source/assets/blackcat.png',
+  step
 }
 
-export function step(scene: Scene) {
+function step(scene: Scene) {
   const solidObjects = scene.entities.filter((e: any) => e.solid ) as GameObject[]
   
   if(cat.contacts?.down) {

@@ -22,7 +22,7 @@ export async function loadScene(module: Scene) {
 // the entire gameloop =)
 function step() {
   Ctx.clearRect(0, 0, Canvas.width, Canvas.height);
-  if (actualScene.alive) actualScene.alive()
+  if(actualScene.step) actualScene.step()
   for(let i = 0; i < actualScene.entities.length; i++) {
     actualScene.entities[i].step(actualScene)
   }
