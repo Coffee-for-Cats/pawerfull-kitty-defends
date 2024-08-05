@@ -6,6 +6,13 @@ import { GameObject } from "../interfaces";
 export function update_pos(obj: GameObject, entities: GameObject[]) {
   const objImg = obj.image || { width: 0, height: 0 }
 
+  if(obj.contacts) {
+    obj.contacts.left = null
+    obj.contacts.right = null;
+    obj.contacts.down = null;
+    obj.contacts.up = null;
+  }
+
   // for y axis, calculate, for every entity, the minimum distance.
   for(const ent of entities) {
     const entImg = ent.image || { width: 0, height: 0 }
@@ -14,7 +21,13 @@ export function update_pos(obj: GameObject, entities: GameObject[]) {
     const distY = Math.abs(obj.y + obj.velY - ent.y) - (objImg.height / 2 + entImg.height / 2)
 
     if(distX < 0 && distY < 0) {
+      // limits the movement to the space avaliable
       obj.velY += distY * Math.sign(obj.velY)
+      // updates contacts information about the object
+      if(obj.contacts) {
+        if(obj.y > ent.y) obj.contacts.down = ent;
+        if(obj.y < ent.y) obj.contacts.up = ent;
+      }
     }
   }
 
@@ -28,37 +41,14 @@ export function update_pos(obj: GameObject, entities: GameObject[]) {
     const distY = Math.abs(obj.y - ent.y) - (objImg.height / 2 + entImg.height / 2)
 
     if(distX < 0 && distY < 0) {
+      // limits the movement to the space avaliable
       obj.velX += distX * Math.sign(obj.velX)
+      if(obj.contacts) {
+        if(obj.x > ent.x) obj.contacts.left = ent;
+        if(obj.x < ent.x) obj.contacts.right = ent;
+      }
     }
   }
 
   obj.x += obj.velX;
-}
-
-// 
-export const contacts: {[index: string]: GameObject | null} = {
-  up: null, down: null, left: null, right: null
-}
-// updates contacts with references to objects inside the gap (in px) of distance from obj
-export function loosy_conctacts_update(obj: GameObject, entities: GameObject[], gap: number) {
-  
-  contacts.left = null
-  contacts.right = null;
-  contacts.down = null;
-  contacts.up = null;
-  
-  const objImg = obj.image || { width: 0, height: 0 }
-  
-  for(const ent of entities) {
-    const entImg = ent.image || { width: 0, height: 0 }
-    const distX = Math.abs(obj.x - ent.x) - (objImg.width / 2 + entImg.width / 2)
-    const distY = Math.abs(obj.y - ent.y) - (objImg.height / 2 + entImg.height / 2)
-
-    if (distX < gap && distY < gap) {
-      if(obj.x > ent.x) contacts.left = ent;
-      if(obj.x < ent.x) contacts.right = ent;
-      if(obj.y > ent.y) contacts.down = ent;
-      if(obj.y < ent.y) contacts.up = ent;
-    }
-  }
 }

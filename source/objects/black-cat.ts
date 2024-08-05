@@ -1,32 +1,46 @@
-import { GameObject, Paintable, Scene } from "../interfaces"
+import { direction, GameObject, Paintable, Scene } from "../interfaces"
 import { ActiveKeys } from "../utils/key-mapping";
-import { Paint } from "../utils/painting"
-import { contacts, loosy_conctacts_update, update_pos } from "../utils/physics";
+import { cooldown } from "../utils/other";
+import { flipImage, Paint } from "../utils/painting"
+import { update_pos } from "../utils/physics";
 
 
 const cat: GameObject = {
   solid: false,
   x: 0, y: 0,
   velX: 0, velY: 0,
+  direction: direction.left,
+  contacts: {},
   source: '/source/assets/blackcat.png'
 }
 
 export function step(scene: Scene) {
   const solidObjects = scene.entities.filter((e: any) => e.solid ) as GameObject[]
-  loosy_conctacts_update(cat, solidObjects, 2);
-  // controls & movement
-  if(contacts.down) {
-    if(ActiveKeys['ArrowUp']) cat.velY += 16      // jump
+  
+  if(cat.contacts?.down) {
+    if(ActiveKeys['ArrowUp']) cat.velY += 16
   }
-  if(ActiveKeys['ArrowUp']) cat.velY += .1      // jump
-  if(ActiveKeys['ArrowLeft']) cat.velX -= .8    // left and right
-  if(ActiveKeys['ArrowRight']) cat.velX += .8  
+  if(ActiveKeys['ArrowUp']) cat.velY += .3        // holds in the air
+  if(ActiveKeys['ArrowLeft']) {
+    if(cat.direction === direction.right) {
+      flipImage(cat)
+      cat.direction = direction.left
+    }
+    cat.velX -= 2
+  }
+  if(ActiveKeys['ArrowRight']) {
+    if(cat.direction === direction.left) {
+      flipImage(cat)
+      cat.direction = direction.right
+    }
+    cat.velX += 2
+  } 
   
   cat.velY -= 0.6 // gravity
   
   // constant air frictions
   cat.velY -= cat.velY * .04
-  cat.velX -= cat.velX * .08
+  cat.velX -= cat.velX * .2
 
   update_pos(cat, solidObjects);
 

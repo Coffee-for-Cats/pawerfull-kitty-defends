@@ -1,5 +1,5 @@
 import { Canvas, Ctx } from "../main";
-import { Paintable } from "../interfaces";
+import { GameObject, Paintable } from "../interfaces";
 import { ZOOM_LEVEL } from "../config" 
 
 export const Camera = {
@@ -32,7 +32,8 @@ export function getSource(stringSrc: string) {
   const tempImg = document.createElement('img')
   tempImg.src = stringSrc
   
-  cachedSources[stringSrc] = document.createElement('canvas') as HTMLCanvasElement
+  // image didn't load yet
+  cachedSources[stringSrc] = new OffscreenCanvas(1, 1)
   
   tempImg.onload = function initializeBuffer() {
     cachedSources[stringSrc].width = tempImg.width * ZOOM_LEVEL
@@ -47,4 +48,22 @@ export function getSource(stringSrc: string) {
   }
 
   return cachedSources[stringSrc]
+}
+
+const canvasBuffer = new OffscreenCanvas(1, 1);
+const ctxBuffer = canvasBuffer.getContext('2d')!;
+export function flipImage(obj: GameObject) {
+  if(obj.direction === undefined) throw new Error('Define a direction for the object first!');
+  if(!obj.image) throw new Error('Paint the object at least once before flipping the image!');
+  
+  canvasBuffer.width = obj.image.width; canvasBuffer.height = obj.image.height;
+  ctxBuffer.drawImage(obj.image, 0, 0)
+  
+  const tempCtx = obj.image.getContext('2d')!
+  tempCtx.save()
+  tempCtx.clearRect(0, 0, obj.image.width, obj.image.height)
+  tempCtx.translate(obj.image.width, 0)
+  tempCtx.scale(-1, 1)
+  tempCtx.drawImage(canvasBuffer, 0, 0)
+  tempCtx.restore()
 }
