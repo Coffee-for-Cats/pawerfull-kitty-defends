@@ -2,15 +2,22 @@
 import { Paint } from "../utils/painting";
 
 
-export const plataform = {
-  x: 0, y: -200,
+export const plataform1 = {
+  x: 200, y: -80,
   source: '/source/assets/plataform.png',
   solid: true,
   step
 }
 
 export const plataform2 = {
-  x: 0, y: 150,
+  x: 200, y: 40,
+  source: '/source/assets/plataform.png',
+  solid: true,
+  step
+}
+
+export const plataform3 = {
+  x: 200, y: 160,
   source: '/source/assets/plataform.png',
   solid: true,
   step
