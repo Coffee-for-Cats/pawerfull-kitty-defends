@@ -1,7 +1,7 @@
 const cooldowns: {[index: string]: boolean} = {}
 
 export function cooldown(cd_codename: string, cd_time: number, callback: Function) {
-  console.log(cooldowns[cd_codename])
+  //console.log(cooldowns[cd_codename])
   if(!cooldowns[cd_codename]) {
     callback()
     cooldowns[cd_codename] = true

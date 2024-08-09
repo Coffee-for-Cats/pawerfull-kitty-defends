@@ -3,12 +3,13 @@ import { ActiveKeys } from "../utils/key-mapping";
 import { cooldown } from "../utils/other";
 import { flipImage, Paint } from "../utils/painting"
 import { update_pos } from "../utils/physics";
+import { plataform1, plataform2, plataform3 } from "./plataform";
 
 const accMult = 1;
 
 export const cat: GameObject = {
   solid: false,
-  x: 200, y: 60,
+  x: 200, y: 100,
   velX: 0, velY: 0,
   direction: direction.left,
   contacts: {},
@@ -20,9 +21,9 @@ function step(scene: Scene) {
   // physics layer
   const solidObjects = scene.entities.filter((e: any) => e.solid ) as GameObject[]
   
+  switchPlataformSolidity()
   catsControls()
   catsPhysics(solidObjects)
-  turnPlataformSolidity()
 
   Paint(cat as Paintable)
 }
@@ -39,7 +40,9 @@ function catsPhysics(solidObjects: GameObject[]) {
 
 function catsControls() {
   if(cat.contacts?.down) {
-    if(ActiveKeys['ArrowUp']) cat.velY += 12 * accMult
+    if(ActiveKeys['ArrowUp']) cooldown('jump', .2, () => {
+      cat.velY += 12 * accMult
+    })
   }
   if(ActiveKeys['ArrowUp']) cat.velY += .4 * accMult        // holds in the air
   
@@ -56,12 +59,19 @@ function catsControls() {
       cat.direction = direction.right
     }
     cat.velX += 2 * accMult
-  } 
+  }
+  if(ActiveKeys['ArrowDown']) {
+    for(const plat of [plataform2, plataform3]) {
+      plat.solid = false;
+    }
+  }
 }
 
-import { plataform1, plataform2, plataform3 } from "./plataform";
-function turnPlataformSolidity() {
+function switchPlataformSolidity() {
   for(const plat of [plataform1, plataform2, plataform3]) {
-    plat.solid = cat.y > plat.y + 49 ? true : false; 
+    const switchGap = cat.image 
+      ? cat.image!.height! / 2 + (plat as GameObject).image!.height / 2 - 1 
+      : 49;
+    plat.solid = cat.y > plat.y + switchGap ? true : false; 
   }
 }
