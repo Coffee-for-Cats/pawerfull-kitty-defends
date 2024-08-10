@@ -1,13 +1,11 @@
 import type { Entity } from '../interfaces'
 import { cat } from '../objects/black-cat'
-import { plataform1, plataform2, plataform3 } from '../objects/plataform'
+import { plataforms } from '../objects/plataform'
 
 
 export const entities: Entity[] = [
   cat,
-  plataform1,
-  plataform2,
-  plataform3
+  ...plataforms
 ]
 
 export function load() {

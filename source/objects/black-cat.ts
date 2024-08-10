@@ -3,7 +3,7 @@ import { ActiveKeys } from "../utils/key-mapping";
 import { cooldown } from "../utils/other";
 import { flipImage, Paint } from "../utils/painting"
 import { update_pos } from "../utils/physics";
-import { plataform1, plataform2, plataform3 } from "./plataform";
+import { plataforms } from "./plataform";
 
 const accMult = 1;
 
@@ -25,7 +25,7 @@ function step(scene: Scene) {
   catsControls()
   catsPhysics(solidObjects)
 
-  Paint(cat as Paintable)
+  Paint(cat)
 }
 
 function catsPhysics(solidObjects: GameObject[]) {
@@ -61,14 +61,13 @@ function catsControls() {
     cat.velX += 2 * accMult
   }
   if(ActiveKeys['ArrowDown']) {
-    for(const plat of [plataform2, plataform3]) {
-      plat.solid = false;
-    }
+    plataforms[1].solid = false;
+    plataforms[2].solid = false;
   }
 }
 
 function switchPlataformSolidity() {
-  for(const plat of [plataform1, plataform2, plataform3]) {
+  for(const plat of plataforms) {
     const switchGap = cat.image 
       ? cat.image!.height! / 2 + (plat as GameObject).image!.height / 2 - 1 
       : 49;
