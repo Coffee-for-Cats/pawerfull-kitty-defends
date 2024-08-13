@@ -35,6 +35,10 @@ export function getSource(stringSrc: string) {
   // image didn't load yet
   cachedSources[stringSrc] = new OffscreenCanvas(1, 1)
   
+  tempImg.onerror = function imageLoadError() {
+    throw new Error(`${stringSrc} not found!`)
+  }
+
   tempImg.onload = function initializeBuffer() {
     cachedSources[stringSrc].width = tempImg.width * ZOOM_LEVEL
     cachedSources[stringSrc].height = tempImg.height * ZOOM_LEVEL
