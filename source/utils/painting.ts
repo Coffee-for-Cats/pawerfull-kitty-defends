@@ -1,4 +1,4 @@
-import { Canvas, Ctx } from "../main";
+import { Canvas, Ctx } from "../game";
 import { GameObject, Paintable } from "../interfaces";
 import { ZOOM_LEVEL } from "../config" 
 

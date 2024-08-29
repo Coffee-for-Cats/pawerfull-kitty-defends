@@ -5,16 +5,12 @@ import { cauldron } from '../objects/cauldron'
 import { herbs } from '../objects/herbs'
 
 export let entities: Entity[] = [];
-export function reloadExposedObjects() {
+
+export function load() {
   entities = [
     cat,
     ...plataforms,
     cauldron,
     ...herbs
   ]
-}
-reloadExposedObjects()
-
-export function load() {
-  
 }

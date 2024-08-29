@@ -7,6 +7,7 @@ export interface Scene {
 
 export interface Entity {
   step: Function,
+  drop?: Function,
 }
 
 export interface Paintable extends Entity {
@@ -26,9 +27,9 @@ export interface GameObject extends Paintable {
   velY: number
   direction?: direction
   contacts?: {
-    up?:     GameObject | null,
-    down?:   GameObject | null,
-    right?:  GameObject | null,
-    left?:   GameObject | null,
+    up:     GameObject | null,
+    down:   GameObject | null,
+    right:  GameObject | null,
+    left:   GameObject | null,
   }
 }

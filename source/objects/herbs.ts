@@ -1,7 +1,8 @@
 import { ZOOM_LEVEL } from "../config";
 import { GameObject } from "../interfaces";
-import { entities, reloadExposedObjects } from "../scenes/course-select";
+import { load } from "../scenes/course-select";
 import { ActiveKeys } from "../utils/key-mapping";
+import { Drop } from "../utils/objects";
 import { cooldown } from "../utils/other";
 import { Paint } from "../utils/painting";
 import { update_pos } from "../utils/physics";
@@ -18,8 +19,7 @@ const avaliableSpaces: (Herb | null)[][] = [
 
 export let herbs: Herb[] = []
 function reloadHerbReferences() {
-  herbs = avaliableSpaces.flat().filter(h => h != null)
-  reloadExposedObjects()
+  load()
 }
 
 function getNextPlatPos() {
@@ -44,7 +44,6 @@ export class Herb implements GameObject {
     this.y = plataforms[i].y + 6 * ZOOM_LEVEL;
     avaliableSpaces[i][j] = this;
     this.herbsIndex = {i, j}
-    reloadHerbReferences()
 
     switch(type) {
       case 'waterleaf': this.source = "/source/assets/waterleaf.png"; break;
@@ -57,6 +56,11 @@ export class Herb implements GameObject {
       this.step = fall;
     })
     Paint(this)
+  }
+
+  drop() {
+    herbs = avaliableSpaces.flat().filter(h => h != null)
+    alert('Cauldron flashed!')
   }
 }
 

@@ -3,19 +3,16 @@ import { ActiveKeys } from "../utils/key-mapping";
 import { cooldown } from "../utils/other";
 import { flipImage, Paint } from "../utils/painting"
 import { update_pos } from "../utils/physics";
+import { DefaultObject } from "./defaults";
 import { plataforms } from "./plataform";
 
 const accMult = 1;
 
-export const cat: GameObject = {
-  solid: false,
-  x: 200, y: 100,
-  velX: 0, velY: 0,
-  direction: direction.left,
-  contacts: {},
+export const cat: GameObject = new DefaultObject({
+  x: 200, y: 120,
   source: '/source/assets/blackcat.png',
   step
-}
+})
 
 function step(scene: Scene) {
   // physics layer

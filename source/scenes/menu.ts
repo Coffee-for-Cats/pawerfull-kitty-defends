@@ -1,4 +1,4 @@
-import { loadScene } from "../main";
+import { loadScene } from "../game";
 import { CONTAINER_SOURCE } from "../config";
 
 import * as SelectingScene from './course-select'
